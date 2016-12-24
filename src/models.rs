@@ -1,3 +1,7 @@
+#![feature(proc_macro)]
+
+extern crate serde_json;
+
 use super::schema::games;
 
 #[derive(Queryable)]
@@ -6,8 +10,9 @@ pub struct Game {
     pub name: String
 }
 
+#[derive(Serialize, Deserialize, Debug)]
 #[derive(Insertable)]
 #[table_name="games"]
-pub struct NewGame<'a> {
-    pub name: &'a str,
+pub struct NewGame {
+    pub name: String,
 }

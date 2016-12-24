@@ -3,12 +3,16 @@
 #[macro_use] extern crate diesel;
 extern crate dotenv;
 #[macro_use] extern crate diesel_codegen;
+#[macro_use] extern crate serde_derive;
+extern crate hyper;
 
 use diesel::prelude::*;
 use diesel::pg::PgConnection;
 use dotenv::dotenv;
 use std::env;
 use self::models::{Game, NewGame};
+use hyper::{Client};
+use std::io::Read;
 
 pub mod schema;
 pub mod models;
@@ -22,7 +26,7 @@ pub fn establish_connection() -> PgConnection {
         .expect(&format!("Error connecting to {}", database_url))
 }
 
-pub fn create_post<'a>(conn: &PgConnection, name: &'a str) -> Game {
+pub fn create_post<'a>(conn: &PgConnection, name: String) -> Game {
     use schema::games;
 
     let new_game = NewGame {
@@ -32,4 +36,17 @@ pub fn create_post<'a>(conn: &PgConnection, name: &'a str) -> Game {
     diesel::insert(&new_game).into(games::table)
         .get_result(conn)
         .expect("Error saving new game.")
+}
+
+pub fn request_data() -> String {
+    dotenv().ok();
+    let api_key = env::var("RIOT_API_KEY").expect("RIOT api key should be set.");
+
+    let client = Client::new();
+    let mut res = client.get("https://euw.api.pvp.net/observer-mode/rest/featured?api_key=RGAPI-11577715-A924-4825-A831-FF7038985625").send().unwrap();
+    let mut response = String::new();
+    res.read_to_string(&mut response);
+    println!("{:?}", response);
+    assert_eq!(res.status, hyper::Ok);
+    "tt".to_string()
 }

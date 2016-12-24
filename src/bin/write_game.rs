@@ -13,7 +13,7 @@ fn main() {
     let name = &name[..(name.len() - 1)]; // Drop the newline character
     println!("\nOk! Let's write {} (Press {} when finished)\n", name, EOF);
 
-    let game = create_post(&connection, name);
+    let game = create_post(&connection, name.to_string());
     println!("\nSaved game {} with id {}", name, game.id);
 }
 
