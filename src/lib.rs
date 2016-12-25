@@ -26,11 +26,12 @@ pub fn establish_connection() -> PgConnection {
         .expect(&format!("Error connecting to {}", database_url))
 }
 
-pub fn create_post<'a>(conn: &PgConnection, name: String) -> Game {
+pub fn create_post<'a>(conn: &PgConnection, name: String, id: i32) -> Game {
     use schema::games;
 
     let new_game = NewGame {
         name: name,
+        id: id,
     };
 
     diesel::insert(&new_game).into(games::table)
@@ -43,10 +44,11 @@ pub fn request_data() -> String {
     let api_key = env::var("RIOT_API_KEY").expect("RIOT api key should be set.");
 
     let client = Client::new();
-    let mut res = client.get("https://euw.api.pvp.net/observer-mode/rest/featured?api_key=RGAPI-11577715-A924-4825-A831-FF7038985625").send().unwrap();
+    //let mut res = client.get("https://euw.api.pvp.net/observer-mode/rest/featured?api_key=RGAPI-11577715-A924-4825-A831-FF7038985625").send().unwrap();
+    let mut res = client.get("http://status.leagueoflegends.com/shards").send().unwrap();
     let mut response = String::new();
     res.read_to_string(&mut response);
     println!("{:?}", response);
     assert_eq!(res.status, hyper::Ok);
-    "tt".to_string()
+    response
 }

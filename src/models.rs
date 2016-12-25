@@ -15,4 +15,22 @@ pub struct Game {
 #[table_name="games"]
 pub struct NewGame {
     pub name: String,
+    pub id: i32,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct Shard {
+    pub region_tag: String,
+
+    //#[serde(skip_serializing)]
+    //pub locales: String,
+
+    //#[serde(skip_serializing)]
+    pub name: String,
+
+    //#[serde(skip_serializing)]
+    //pub hostname: String,
+
+    //#[serde(skip_serializing)]
+    //pub slug: String,
 }
