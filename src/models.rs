@@ -40,7 +40,7 @@ pub struct FeaturedGameInfo {
     #[serde(rename="participants")]
     pub participants: Vec<Participant>,
     #[serde(rename="platformId")]
-    pub platform_id: u64,
+    pub platform_id: String,
 }
 
 #[derive(Serialize, Deserialize, Debug)]

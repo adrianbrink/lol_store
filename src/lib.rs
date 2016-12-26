@@ -40,10 +40,10 @@ pub mod client {
         res
     }
 
-    pub fn get_featured_games() -> Vec<FeaturedGames> {
+    pub fn get_featured_games() -> FeaturedGames {
         let data = request_get_featured_games();
-        println!("{}", data);
-        let deserialized_featured_games: Vec<FeaturedGames> = serde_json::from_str(&data).unwrap();
+        // println!("{}", data);
+        let deserialized_featured_games: FeaturedGames = serde_json::from_str(&data).unwrap();
         deserialized_featured_games
     }
 
