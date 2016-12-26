@@ -8,8 +8,8 @@ pub struct Shard {
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct FeaturedGames {
-    #[serde(rename = "clientRefreshInterval")]
-    pub client_refresh_interval: u64,
+    //#[serde(rename = "clientRefreshInterval")]
+    pub clientRefreshInterval: u64,
 }
 
 

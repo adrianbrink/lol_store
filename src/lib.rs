@@ -26,7 +26,7 @@ pub mod client {
         let client = Client::new();
         let mut req = client.get(&request_url).send().expect("API call failed.");
         let mut res = String::new();
-        req.read_to_string(&mut res);
+        let _ = req.read_to_string(&mut res);
         res
     }
 
@@ -36,7 +36,7 @@ pub mod client {
             .send()
             .expect("API call failed.");
         let mut res = String::new();
-        req.read_to_string(&mut res);
+        let _ = req.read_to_string(&mut res);
         res
     }
 
