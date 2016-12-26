@@ -3,16 +3,7 @@ extern crate serde_json;
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Shard {
     pub region_tag: String,
-
-    //#[serde(skip_serializing)]
-    //#pub locales: String,
-    //
-    //#[serde(skip_serializing)]
-    pub name: String, /* [serde(skip_serializing)]
-                       * pub hostname: String,
-                       *
-                       * [serde(skip_serializing)]
-                       * pub slug: String, */
+    pub name: String,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
