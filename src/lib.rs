@@ -42,6 +42,7 @@ pub mod client {
 
     pub fn get_featured_games() -> Vec<FeaturedGames> {
         let data = request_get_featured_games();
+        println!("{}", data);
         let deserialized_featured_games: Vec<FeaturedGames> = serde_json::from_str(&data).unwrap();
         deserialized_featured_games
     }
@@ -51,8 +52,6 @@ pub mod client {
         let deserialized_shards: Vec<Shard> = serde_json::from_str(&data).unwrap();
         deserialized_shards
     }
-
-
 }
 
 

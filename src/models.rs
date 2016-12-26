@@ -2,14 +2,24 @@ extern crate serde_json;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Shard {
-    pub region_tag: String,
+    pub hostname: String,
+    pub locales: Vec<String>,
     pub name: String,
+    pub region_tag: String,
+    pub slug: String,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct FeaturedGames {
-    //#[serde(rename = "clientRefreshInterval")]
-    pub clientRefreshInterval: u64,
+    #[serde(skip_serializing)]
+    #[serde(rename = "gameList")]
+    pub game_list: Vec<FeaturedGameInfo>,
+    #[serde(rename = "clientRefreshInterval")]
+    pub client_refresh_interval: i32,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct FeaturedGameInfo {
 }
 
 

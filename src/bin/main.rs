@@ -14,7 +14,7 @@ fn main() {
     let shards = get_shards();
     println!("deserialized shards = {:?}", shards);
 
-    let featured_games = get_featured_games();
+    //let featured_games = get_featured_games();
     // println!("deserialized featured_games = {:?}", featured_games);
 
 
