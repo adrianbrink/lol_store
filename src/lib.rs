@@ -9,7 +9,7 @@ extern crate serde_derive;
 extern crate diesel;
 #[macro_use]
 extern crate diesel_codegen;
-
+extern crate redis;
 
 pub mod models;
 pub mod schema;
@@ -21,6 +21,7 @@ use std::env;
 use hyper::Client;
 use std::io::Read;
 use models::{Shard, LoadedShard, FeaturedGames, Game, LoadedGame};
+use redis::Commands;
 
 // TODO
 // - refactor to group this into a struct
@@ -29,6 +30,8 @@ use models::{Shard, LoadedShard, FeaturedGames, Game, LoadedGame};
 // - hyper client should be injected into struct
 // - then write tests for this struct since I can mock things
 // - return Option/Result instead of force unwrapping
+
+// *** APIClient ***
 fn request_get_featured_games() -> String {
     dotenv().ok();
     let api_key = env::var("RIOT_API_KEY").expect("RIOT api key should be set.");
@@ -64,8 +67,8 @@ pub fn get_shards() -> Vec<Shard> {
     deserialized_shards
 }
 
-
-pub fn establish_connection() -> PgConnection {
+// *** PostgresDB ***
+fn establish_connection() -> PgConnection {
     dotenv().ok();
 
     let database_url = env::var("DATABASE_URL").expect("DATABASE_URL must be set");
@@ -90,4 +93,20 @@ pub fn create_game(conn: &PgConnection, game: &Game) -> LoadedGame {
 pub fn create_games(conn: &PgConnection, games: &Vec<Game>) -> Vec<LoadedGame> {
     use schema::games;
     diesel::insert(games).into(games::table).get_results(conn).expect("Error saving new games.")
+}
+
+// *** RedisDB ***
+fn get_redis_client() -> redis::Connection {
+    let client = redis::Client::open("redis://127.0.0.1/").unwrap();
+    let conn = client.get_connection().unwrap();
+    conn
+}
+pub fn save_game_id(game_id: i64) {
+    let conn = get_redis_client();
+    let _: () = conn.set("game_id", game_id).unwrap();
+}
+
+pub fn retrieve_game_id() -> i64 {
+    let conn = get_redis_client();
+    conn.get("game_id").unwrap()
 }

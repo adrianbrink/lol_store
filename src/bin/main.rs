@@ -7,6 +7,10 @@ use self::lol_store::models::*;
 fn main() {
     println!("Hello, world!");
 
+    save_game_id(33333);
+    let game_id = retrieve_game_id();
+    println!("{}", game_id);
+
     let shards = get_shards();
     let printable_shards = serde_json::to_string_pretty(&shards).unwrap();
     println!("deserialized shards = {}", printable_shards);
@@ -14,8 +18,6 @@ fn main() {
     let featured_games = get_featured_games();
     let printable_featured_games = serde_json::to_string_pretty(&featured_games).unwrap();
     println!("deserialized featured_games = {}", printable_featured_games);
-
-    let connection = establish_connection();
 
     let shard = Shard {
         hostname: "ssss".to_string(),
@@ -69,5 +71,13 @@ fn main() {
 // RedisDriver {
 // - saves a summoner id to redis
 // - loads a summoner id from redis
+// - maintain a list that acts as a queue
+// - maintain a set to ensure uniqueness
+// - when saving a new value, first store it in the set and if no error then it is unique
+// - if unique then store it in the list with RPUSH
+// - only pop items with LPOP
 // }
-//
+
+// ConnectionManager {
+//     - stores references to all database connections
+// }
