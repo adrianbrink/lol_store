@@ -6,6 +6,7 @@ use std::env;
 use redis::{Client, Commands, Connection};
 
 pub struct RedisConnector {
+    // keep this around
     database_url: String,
     pub connection: Connection,
 }
