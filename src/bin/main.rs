@@ -17,4 +17,12 @@ fn main() {
     let featured_games = get_featured_games();
     let printable_featured_games = serde_json::to_string_pretty(&featured_games).unwrap();
     println!("deserialized featured_games = {}", printable_featured_games);
+
+    let connection = establish_connection();
+
+    let loaded_shards = create_shards(&connection, &shards);
+    println!("{:?}", loaded_shards);
+
+    let loaded_games = create_games(&connection, &featured_games.game_list);
+    println!("{:?}", loaded_games);
 }

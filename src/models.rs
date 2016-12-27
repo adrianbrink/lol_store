@@ -4,9 +4,8 @@ use super::schema::shards;
 use super::schema::games;
 
 // This struct is used to deserialize to and then save to DB.
-#[derive(Insertable)]
 #[table_name="shards"]
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Insertable)]
 pub struct Shard {
     pub hostname: String,
     // pub locales: Vec<String>,
@@ -34,9 +33,8 @@ pub struct FeaturedGames {
     pub game_list: Vec<Game>,
 }
 
-#[derive(Insertable)]
 #[table_name="games"]
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Insertable)]
 pub struct Game {
     //#[serde(rename="bannedChampions")]
     //#pub banned_champions: Vec<BannedChampion>,
@@ -62,7 +60,7 @@ pub struct Game {
     pub platform_id: String,
 }
 
-#[derive(Queryable)]
+#[derive(Queryable, Debug)]
 pub struct LoadedGame {
     pub id: i32,
     //#[serde(rename="bannedChampions")]

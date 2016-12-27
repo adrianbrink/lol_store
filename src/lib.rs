@@ -20,7 +20,7 @@ use dotenv::dotenv;
 use std::env;
 use hyper::Client;
 use std::io::Read;
-use models::{Shard, LoadedShard, FeaturedGames, Game};
+use models::{Shard, LoadedShard, FeaturedGames, Game, LoadedGame};
 
 // TODO
 // - refactor to group this into a struct
@@ -74,6 +74,20 @@ pub fn establish_connection() -> PgConnection {
 
 pub fn create_shard(conn: &PgConnection, shard: &Shard) -> LoadedShard {
     use schema::shards;
-    println!("It worked");
     diesel::insert(shard).into(shards::table).get_result(conn).expect("Error saving new shard.")
+}
+
+pub fn create_shards(conn: &PgConnection, shards: &Vec<Shard>) -> Vec<LoadedShard> {
+    use schema::shards;
+    diesel::insert(shards).into(shards::table).get_results(conn).expect("Error saving new shards.")
+}
+
+pub fn create_game(conn: &PgConnection, game: &Game) -> LoadedGame {
+    use schema::games;
+    diesel::insert(game).into(games::table).get_result(conn).expect("Error saving new game.")
+}
+
+pub fn create_games(conn: &PgConnection, games: &Vec<Game>) -> Vec<LoadedGame> {
+    use schema::games;
+    diesel::insert(games).into(games::table).get_results(conn).expect("Error saving new games.")
 }
