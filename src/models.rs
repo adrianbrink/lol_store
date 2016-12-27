@@ -16,7 +16,7 @@ pub struct Shard {
 }
 
 // This struct is used to load from DB.
-#[derive(Queryable)]
+#[derive(Queryable, Debug)]
 pub struct LoadedShard {
     pub id: i32,
     pub hostname: String,

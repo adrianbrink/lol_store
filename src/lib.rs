@@ -72,7 +72,8 @@ pub fn establish_connection() -> PgConnection {
     PgConnection::establish(&database_url).expect(&format!("Error connecting to {}", database_url))
 }
 
-pub fn create_shard(conn: &PgConnection, shard: Shard) -> LoadedShard {
+pub fn create_shard(conn: &PgConnection, shard: &Shard) -> LoadedShard {
     use schema::shards;
-    x
+    println!("It worked");
+    diesel::insert(shard).into(shards::table).get_result(conn).expect("Error saving new shard.")
 }
