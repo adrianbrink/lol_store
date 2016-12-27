@@ -5,14 +5,22 @@ extern crate hyper;
 extern crate serde_json;
 #[macro_use]
 extern crate serde_derive;
+#[macro_use]
+extern crate diesel;
+#[macro_use]
+extern crate diesel_codegen;
+
 
 pub mod models;
+pub mod schema;
 
+use diesel::prelude::*;
+use diesel::pg::PgConnection;
 use dotenv::dotenv;
 use std::env;
 use hyper::Client;
 use std::io::Read;
-use models::{Shard, FeaturedGames};
+use models::{Shard, LoadedShard, FeaturedGames, Game};
 
 // TODO
 // - refactor to group this into a struct
@@ -54,4 +62,17 @@ pub fn get_shards() -> Vec<Shard> {
     let data = request_get_shards();
     let deserialized_shards: Vec<Shard> = serde_json::from_str(&data).unwrap();
     deserialized_shards
+}
+
+
+pub fn establish_connection() -> PgConnection {
+    dotenv().ok();
+
+    let database_url = env::var("DATABASE_URL").expect("DATABASE_URL must be set");
+    PgConnection::establish(&database_url).expect(&format!("Error connecting to {}", database_url))
+}
+
+pub fn create_shard(conn: &PgConnection, shard: Shard) -> LoadedShard {
+    use schema::shards;
+    x
 }
