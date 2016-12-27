@@ -11,6 +11,9 @@ extern crate diesel;
 extern crate diesel_codegen;
 extern crate redis;
 
+pub mod league_api;
+pub mod postgres_connection;
+pub mod redis_connection;
 pub mod models;
 pub mod schema;
 
@@ -31,7 +34,7 @@ use redis::Commands;
 // - then write tests for this struct since I can mock things
 // - return Option/Result instead of force unwrapping
 
-// *** APIClient ***
+// *** APIClient - deprecated ***
 fn request_get_featured_games() -> String {
     dotenv().ok();
     let api_key = env::var("RIOT_API_KEY").expect("RIOT api key should be set.");
@@ -56,7 +59,6 @@ fn request_get_shards() -> String {
 
 pub fn get_featured_games() -> FeaturedGames {
     let data = request_get_featured_games();
-    // println!("{}", data);
     let deserialized_featured_games: FeaturedGames = serde_json::from_str(&data).unwrap();
     deserialized_featured_games
 }
@@ -67,10 +69,9 @@ pub fn get_shards() -> Vec<Shard> {
     deserialized_shards
 }
 
-// *** PostgresDB ***
-fn establish_connection() -> PgConnection {
+// *** PostgresDB - deprecated ***
+pub fn establish_connection() -> PgConnection {
     dotenv().ok();
-
     let database_url = env::var("DATABASE_URL").expect("DATABASE_URL must be set");
     PgConnection::establish(&database_url).expect(&format!("Error connecting to {}", database_url))
 }

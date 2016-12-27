@@ -1,32 +1,38 @@
 extern crate lol_store;
 extern crate serde_json;
 
-use self::lol_store::*;
-use self::lol_store::models::*;
+// use self::lol_store::*;
+// use self::lol_store::models::*;
+use self::lol_store::league_api::*;
 
 fn main() {
     println!("Hello, world!");
 
-    save_game_id(33333);
-    let game_id = retrieve_game_id();
-    println!("{}", game_id);
+    // save_game_id(33333);
+    // let game_id = retrieve_game_id();
+    // println!("{}", game_id);
 
-    let shards = get_shards();
-    let printable_shards = serde_json::to_string_pretty(&shards).unwrap();
-    println!("deserialized shards = {}", printable_shards);
+    let api_client = APIClient::new().unwrap();
+    let shardy = api_client.get_shards();
+    let printable_shardy = serde_json::to_string_pretty(&shardy).unwrap();
+    println!("shardy = {}", printable_shardy);
 
-    let featured_games = get_featured_games();
-    let printable_featured_games = serde_json::to_string_pretty(&featured_games).unwrap();
-    println!("deserialized featured_games = {}", printable_featured_games);
+    // let shards = get_shards();
+    // let printable_shards = serde_json::to_string_pretty(&shards).unwrap();
+    // println!("deserialized shards = {}", printable_shards);
 
-    let shard = Shard {
-        hostname: "ssss".to_string(),
-        name: "ssss".to_string(),
-        region_tag: "ssss".to_string(),
-        slug: "ssss".to_string(),
-    };
+    // let featured_games = get_featured_games();
+    // let printable_featured_games = serde_json::to_string_pretty(&featured_games).unwrap();
+    // println!("deserialized featured_games = {}", printable_featured_games);
 
-    shard.save();
+    // let shard = Shard {
+    //     hostname: "ssss".to_string(),
+    //     name: "ssss".to_string(),
+    //     region_tag: "ssss".to_string(),
+    //     slug: "ssss".to_string(),
+    // };
+
+    // shard.save();
 
     // let loaded_shards = create_shards(&connection, &shards);
     // println!("{:?}", loaded_shards);
@@ -34,6 +40,12 @@ fn main() {
     // let loaded_games = create_games(&connection, &featured_games.game_list);
     // println!("{:?}", loaded_games);
 }
+
+// TODO
+// - write unit tests for all existing public functions
+// - start by writing tests for the functionality I want
+// - implement the RateLimiter
+// - implement the APIClient
 
 // The goal:
 // A small server utility that downloads data from the league api and stores it in a postgres database for future analysis.
