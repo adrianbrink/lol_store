@@ -1,8 +1,7 @@
 extern crate lol_store;
-extern crate diesel;
 extern crate serde_json;
 
-use self::lol_store::client::*;
+use self::lol_store::*;
 
 // TODO
 // - write all the commented out code into a test for deserialization of Shards
@@ -12,8 +11,10 @@ fn main() {
     println!("Hello, world!");
 
     let shards = get_shards();
-    // println!("deserialized shards = {:?}", shards);
+    let printable_shards = serde_json::to_string_pretty(&shards).unwrap();
+    println!("deserialized shards = {}", printable_shards);
 
     let featured_games = get_featured_games();
-    println!("deserialized featured_games = {:?}", featured_games);
+    let printable_featured_games = serde_json::to_string_pretty(&featured_games).unwrap();
+    println!("deserialized featured_games = {}", printable_featured_games);
 }
