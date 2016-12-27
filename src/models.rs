@@ -2,6 +2,7 @@ extern crate serde_json;
 
 use super::schema::shards;
 use super::schema::games;
+use super::*;
 
 // This struct is used to deserialize to and then save to DB.
 #[table_name="shards"]
@@ -12,6 +13,13 @@ pub struct Shard {
     pub name: String,
     pub region_tag: String,
     pub slug: String,
+}
+
+impl Shard {
+    pub fn save(&self) {
+        let conn = establish_connection();
+        let _ = diesel::insert(self).into(shards::table).execute(&conn);
+    }
 }
 
 // This struct is used to load from DB.
