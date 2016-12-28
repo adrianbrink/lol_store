@@ -8,7 +8,6 @@ use diesel::pg::PgConnection;
 use super::models::{Shard, LoadedShard, Game, LoadedGame};
 
 pub struct PostgresConnector {
-    // keep this around, damn you github, one more
     database_url: String,
     pub connection: PgConnection,
 }

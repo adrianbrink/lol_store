@@ -1,5 +1,38 @@
+- figure out how to save foreign keys with diesel
+    - for example, I should be able to save Games directly and the included vector get saved to a different table with the
+    proper mapping using a foreign keys
+
+
 #TODO
-- write unit tests for all existing public functions
+- implement the RedisConnector
+    - redis queue:
+        UniqueQueue {
+            push(val) {
+                let set_val = redis::set::SADD(val);
+                if set_val == 1 {
+                    redis::list::RPUSH(val);
+                } else {
+                    // do nothing
+                }
+            }
+            pop() {
+                let val = redis::list::LPOP();
+                let _ = redis::set::SREM(val);
+                val
+            }
+        }
+    - implement this in my redis_connection.rs with RedisConnector
+- deserialize the featured games and add all involved summoner ids to RedisConnector
+- implement the matchlist endpoint and store them in redis for each summoner_id
+    - that are RANKED, 5v5 and in 2016
+    - key: summoner_id, value: Set<matchId>
+    - redis::SADD summoner_id match_id
+- implement the match endpoint to get data for every game
+    - add involved summoner ids to UniqueQueue
+    - store the results in Postgres
+        - every field of type vec is a new table and every object of the game type that contains a vec creates a new row in one
+        of the other tables
+
 - start by writing tests for the functionality I want
 - implement the RateLimiter
 - implement the APIClient
@@ -12,6 +45,13 @@ The program contacts the league api up to the rate limit and can also work with 
 It starts with the featured games, and then stores all the data in postgres while storing the summoner id's in a queue using
 redis. Then it takes the first summoner id from the queue and pulls all game data for that id. From those games it extracts the
 summoner ids and adds them to the unique queue. Then it runs indefinitely.
+
+#How to get the data
+- everything just for EUW and SEASON2016
+- get one summoner -> get all games with matchlist -> get data for every game with match -> extract all summoners in those games
+-> repeat the process
+- when redis queue is empty just check every 30 seconds, then I can manually resupply the queue
+    - needed in case there is no overlap between leagues
 
 #The design:
 RateLimiter {
