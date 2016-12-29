@@ -22,16 +22,18 @@
             }
         }
     - implement this in my redis_connection.rs with RedisConnector
-- deserialize the featured games and add all involved summoner ids to RedisConnector
-- implement the matchlist endpoint and store them in redis for each summoner_id
+
+- deserialize the featured games and add all involved summoner ids to SummonerUniqueQueue
+
+- implement the matchlist endpoint and store each matchId in MatchUniqueQueue
     - that are RANKED, 5v5 and in 2016
-    - key: summoner_id, value: Set<matchId>
-    - redis::SADD summoner_id match_id
+
 - implement the match endpoint to get data for every game
     - add involved summoner ids to UniqueQueue
     - store the results in Postgres
         - every field of type vec is a new table and every object of the game type that contains a vec creates a new row in one
         of the other tables
+        - maintain a set of all matchIds that I've already downloaded
 
 - start by writing tests for the functionality I want
 - implement the RateLimiter
