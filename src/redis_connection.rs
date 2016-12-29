@@ -33,12 +33,26 @@ impl RedisConnector {
             Err(_) => None,
         }
     }
+}
 
-    pub fn save_game_id(&self, game_id: i64) {
-        let _: () = self.connection.set("game_id", game_id).unwrap();
+pub struct UniqueQueue {
+    connection: Connection,
+    key_name: String,
+}
+
+impl UniqueQueue {
+    pub fn new(connection: Connection, name: String) -> UniqueQueue {
+        UniqueQueue {
+            connection: connection,
+            key_name: name,
+        }
     }
 
-    pub fn retrieve_game_id(&self) -> i64 {
-        self.connection.get("game_id").unwrap()
+    pub fn push(&self, value: String) {
+        unimplemented!();
+    }
+
+    pub fn pop(&self) -> String {
+        unimplemented!();
     }
 }
