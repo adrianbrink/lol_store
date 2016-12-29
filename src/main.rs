@@ -12,8 +12,10 @@ fn main() {
 
     let api_client = APIClient::new().unwrap();
     let names = vec!["n3wk1d".to_string(), "awacatization".to_string()];
-    let featured_games = api_client.request_get_summoner_ids(names);
-    println!("{:?}", featured_games);
+    let result = api_client.get_summoner_ids(names);
+
+    // let featured_games = api_client.request_get_summoner_ids(names);
+    println!("{:?}", result);
 
     // let redis = RedisConnector::new().unwrap();
     // let queue = UniqueQueue::new(redis.connection, "summoner_id".to_string());

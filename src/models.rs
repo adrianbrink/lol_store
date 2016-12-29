@@ -33,6 +33,12 @@ pub struct Participant {
     pub team_id: i64,
 }
 
+#[derive(Serialize, Deserialize, Debug)]
+pub struct Summoner {
+    pub id: i64,
+    pub name: String,
+}
+
 
 // This is old - deprecated
 

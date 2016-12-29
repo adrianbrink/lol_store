@@ -6,8 +6,9 @@ use lol_store::models::Participant;
 #[cfg(test)]
 mod test {
     use super::*;
+    // Tests
     #[test]
-    fn get_summoner_ids() {
+    fn test_get_summoner_ids() {
         let api_client = APIClient::new().unwrap();
         let participant_1 = Participant {
             bot: false,
@@ -34,7 +35,7 @@ mod test {
     }
 
     #[test]
-    fn create_request_url_for_get_summoner_ids() {
+    fn test_create_request_url_for_get_summoner_ids() {
         let api_client = APIClient::new().unwrap();
         let names = vec!["n3wk1d".to_string(), "awacatization".to_string()];
         let url: String = api_client.create_request_url_for_get_summoner_ids(names);
@@ -43,14 +44,12 @@ mod test {
     }
 
     #[test]
-    fn request_get_summoner_ids() {
+    fn test_request_get_summoner_ids() {
         let api_client = APIClient::new().unwrap();
-        let expected_result = "{\"awacatization\":{\"id\":58889103,\"name\":\"awacatization\",\
-                               \"profileIconId\":749,\"summonerLevel\":30,\"revisionDate\":\
-                               1483042076000},\"n3wk1d\":{\"id\":19861577,\"name\":\"N3wK1d\",\
+        let expected_result = "{\"n3wk1d\":{\"id\":19861577,\"name\":\"N3wK1d\",\
                                \"profileIconId\":42,\"summonerLevel\":30,\"revisionDate\":\
                                1477839577000}}";
-        let names = vec!["n3wk1d".to_string(), "awacatization".to_string()];
+        let names = vec!["n3wk1d".to_string()];
         let actual_result = api_client.request_get_summoner_ids(names);
         assert_eq!(actual_result, expected_result);
     }

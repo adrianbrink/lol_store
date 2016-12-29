@@ -6,7 +6,8 @@ use hyper::Client;
 use dotenv::dotenv;
 use std::env;
 use std::io::Read;
-use super::models::{FeaturedGames, Shard, Participant};
+use super::models::{FeaturedGames, Shard, Participant, Summoner};
+use std::collections::BTreeMap;
 
 pub struct APIClient {
     api_key: String,
@@ -29,7 +30,7 @@ impl APIClient {
         }
     }
 
-    fn request_get_featured_games(&self) -> String {
+    pub fn request_get_featured_games(&self) -> String {
         let request_url = format!("https://euw.api.pvp.net/observer-mode/rest/featured?api_key={}",
                                   self.api_key);
         let mut req = self.hyper_client.get(&request_url).send().expect("API call failed.");
@@ -38,7 +39,7 @@ impl APIClient {
         res
     }
 
-    fn request_get_shards(&self) -> String {
+    pub fn request_get_shards(&self) -> String {
         let mut req = self.hyper_client
             .get("http://status.leagueoflegends.com/shards")
             .send()
@@ -67,6 +68,15 @@ impl APIClient {
         let mut res = String::new();
         let _ = req.read_to_string(&mut res);
         res
+    }
+
+    pub fn get_summoner_ids(&self, summoner_names: Vec<String>) -> Vec<(String, i64)> {
+        let data = self.request_get_summoner_ids(summoner_names);
+        let deserialized_summoner_ids: BTreeMap<String, Summoner> = serde_json::from_str(&data)
+            .unwrap();
+        deserialized_summoner_ids.into_iter()
+            .map(|(name, summoner)| (name, summoner.id))
+            .collect::<Vec<(String, i64)>>()
     }
 
     pub fn get_featured_games(&self) -> FeaturedGames {
