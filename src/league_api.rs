@@ -70,13 +70,13 @@ impl APIClient {
         res
     }
 
-    pub fn get_summoner_ids(&self, summoner_names: Vec<String>) -> Vec<(String, i64)> {
+    pub fn get_summoner_ids(&self, summoner_names: Vec<String>) -> Vec<i64> {
         let data = self.request_get_summoner_ids(summoner_names);
         let deserialized_summoner_ids: BTreeMap<String, Summoner> = serde_json::from_str(&data)
             .unwrap();
         deserialized_summoner_ids.into_iter()
-            .map(|(name, summoner)| (name, summoner.id))
-            .collect::<Vec<(String, i64)>>()
+            .map(|(name, summoner)| summoner.id)
+            .collect::<Vec<i64>>()
     }
 
     pub fn get_featured_games(&self) -> FeaturedGames {

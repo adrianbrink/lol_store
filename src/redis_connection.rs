@@ -57,10 +57,10 @@ impl UniqueQueue {
     // This should panic when the Result from adding to the set is Err,
     // because it implies that the connection isn't set up properly.
     // TODO - make this an atomic operation
-    pub fn push(&self, value: String) -> i32 {
-        let x = self.connection.sadd::<_, _, i32>(&self.set_name, &value).unwrap();
+    pub fn push(&self, value: i64) -> i32 {
+        let x = self.connection.sadd::<_, _, i32>(&self.set_name, value).unwrap();
         if x == 1 {
-            self.connection.rpush::<_, _, i32>(&self.list_name, &value).unwrap();
+            self.connection.rpush::<_, _, i32>(&self.list_name, value).unwrap();
         }
         x
     }

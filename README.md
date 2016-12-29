@@ -4,25 +4,6 @@
 
 
 #TODO
-- implement the RedisConnector
-    - redis queue:
-        UniqueQueue {
-            push(val) {
-                let set_val = redis::set::SADD(val);
-                if set_val == 1 {
-                    redis::list::RPUSH(val);
-                } else {
-                    // do nothing
-                }
-            }
-            pop() {
-                let val = redis::list::LPOP();
-                let _ = redis::set::SREM(val);
-                val
-            }
-        }
-    - implement this in my redis_connection.rs with RedisConnector
-
 - deserialize the featured games and add all involved summoner ids to SummonerUniqueQueue
 
 - implement the matchlist endpoint and store each matchId in MatchUniqueQueue
@@ -92,3 +73,24 @@ RedisDriver {
 ConnectionManager {
     - stores references to all database connections
 }
+
+
+#Done
+- implement the RedisConnector
+    - redis queue:
+        UniqueQueue {
+            push(val) {
+                let set_val = redis::set::SADD(val);
+                if set_val == 1 {
+                    redis::list::RPUSH(val);
+                } else {
+                    // do nothing
+                }
+            }
+            pop() {
+                let val = redis::list::LPOP();
+                let _ = redis::set::SREM(val);
+                val
+            }
+        }
+    - implement this in my redis_connection.rs with RedisConnector

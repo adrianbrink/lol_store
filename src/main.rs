@@ -11,11 +11,32 @@ fn main() {
     println!("Hello, world!");
 
     let api_client = APIClient::new().unwrap();
+
+    let featured_games = api_client.get_featured_games();
+    let mut summoners_1 = featured_games.game_list
+        .into_iter()
+        .flat_map(|featured_game| featured_game.participants)
+        .collect::<Vec<Participant>>();
+    let length = summoners_1.len();
+    let summoners_2 = summoners_1.split_off(length / 2);
+
+    let mut summoner_names_1 = api_client.get_summoner_names(summoners_1);
+    let mut summoner_names_2 = api_client.get_summoner_names(summoners_2);
+
+    let mut summoner_ids_1 = api_client.get_summoner_ids(summoner_names_1);
+    let mut summoner_ids_2 = api_client.get_summoner_ids(summoner_names_2);
+    summoner_ids_1.append(&mut summoner_ids_2);
+
+    let redis_connector = RedisConnector::new().unwrap();
+    let unique_queue = UniqueQueue::new(redis_connector.connection, "summoners".to_string());
+
+    let results = summoner_ids_1.into_iter().map(|id| unique_queue.push(id)).collect::<Vec<i32>>();
+
     let names = vec!["n3wk1d".to_string(), "awacatization".to_string()];
     let result = api_client.get_summoner_ids(names);
 
     // let featured_games = api_client.request_get_summoner_ids(names);
-    println!("{:?}", result);
+    println!("{:?}", results);
 
     // let redis = RedisConnector::new().unwrap();
     // let queue = UniqueQueue::new(redis.connection, "summoner_id".to_string());
