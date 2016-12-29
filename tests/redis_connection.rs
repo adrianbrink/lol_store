@@ -14,7 +14,8 @@ mod unique_queue {
     #[test]
     fn push_value_onto_queue() {
         let queue = new_unique_queue();
-        queue.push("1".to_string());
+        let x = queue.push("1".to_string());
+        println!("{}", x);
         // assert_eq!("1".to_string(), queue.pop());
     }
 

@@ -4,9 +4,16 @@ extern crate serde_json;
 // use self::lol_store::*;
 // use self::lol_store::models::*;
 use self::lol_store::league_api::*;
+use lol_store::redis_connection::{RedisConnector, UniqueQueue};
+
 
 fn main() {
     println!("Hello, world!");
+
+    let redis = RedisConnector::new().unwrap();
+    let queue = UniqueQueue::new(redis.connection, "summoner_id".to_string());
+    let x = queue.push("2".to_string());
+    println!("{}", x);
 
     // save_game_id(33333);
     // let game_id = retrieve_game_id();
