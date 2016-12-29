@@ -6,7 +6,7 @@ use hyper::Client;
 use dotenv::dotenv;
 use std::env;
 use std::io::Read;
-use super::models::{FeaturedGames, Shard};
+use super::models::{FeaturedGames, Shard, Participant};
 
 pub struct APIClient {
     api_key: String,
@@ -43,6 +43,27 @@ impl APIClient {
             .get("http://status.leagueoflegends.com/shards")
             .send()
             .expect("API call failed.");
+        let mut res = String::new();
+        let _ = req.read_to_string(&mut res);
+        res
+    }
+
+    pub fn get_summoner_names(&self, participants: Vec<Participant>) -> Vec<String> {
+        participants.into_iter()
+            .map(|participant| participant.summoner_name)
+            .collect()
+    }
+
+    pub fn create_request_url_for_get_summoner_ids(&self, summoner_names: Vec<String>) -> String {
+        let names = summoner_names.join(",");
+        format!("https://euw.api.pvp.net/api/lol/euw/v1.4/summoner/by-name/{}?api_key={}",
+                names,
+                self.api_key)
+    }
+
+    pub fn request_get_summoner_ids(&self, summoner_names: Vec<String>) -> String {
+        let request_url = self.create_request_url_for_get_summoner_ids(summoner_names);
+        let mut req = self.hyper_client.get(&request_url).send().expect("API call failed.");
         let mut res = String::new();
         let _ = req.read_to_string(&mut res);
         res

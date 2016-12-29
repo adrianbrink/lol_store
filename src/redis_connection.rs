@@ -67,10 +67,10 @@ impl UniqueQueue {
 
     // TODO - make this an atomic operation
     pub fn pop(&self) -> Option<i32> {
-        let x = self.connection.lpop::<_, _, i32>(&self.list_name);
+        let x = self.connection.lpop::<_, i32>(&self.list_name);
         match x {
             Ok(val) => {
-                let _ = self.connection.srem::<_, _, i32>(&self.set_name, &val).unwrap();
+                let _ = self.connection.srem::<_, _, i32>(&self.set_name, val).unwrap();
                 Some(val)
             }
             Err(_) => None,

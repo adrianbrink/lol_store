@@ -2,7 +2,7 @@ extern crate lol_store;
 extern crate serde_json;
 
 // use self::lol_store::*;
-// use self::lol_store::models::*;
+use self::lol_store::models::*;
 use self::lol_store::league_api::*;
 use lol_store::redis_connection::{RedisConnector, UniqueQueue};
 
@@ -10,19 +10,24 @@ use lol_store::redis_connection::{RedisConnector, UniqueQueue};
 fn main() {
     println!("Hello, world!");
 
-    let redis = RedisConnector::new().unwrap();
-    let queue = UniqueQueue::new(redis.connection, "summoner_id".to_string());
-    let x = queue.push("2".to_string());
-    println!("{}", x);
+    let api_client = APIClient::new().unwrap();
+    let names = vec!["n3wk1d".to_string(), "awacatization".to_string()];
+    let featured_games = api_client.request_get_summoner_ids(names);
+    println!("{:?}", featured_games);
+
+    // let redis = RedisConnector::new().unwrap();
+    // let queue = UniqueQueue::new(redis.connection, "summoner_id".to_string());
+    // let x = queue.push("2".to_string());
+    // println!("{}", x);
 
     // save_game_id(33333);
     // let game_id = retrieve_game_id();
     // println!("{}", game_id);
 
-    let api_client = APIClient::new().unwrap();
-    let shardy = api_client.get_shards();
-    let printable_shardy = serde_json::to_string_pretty(&shardy).unwrap();
-    println!("shardy = {}", printable_shardy);
+    // let api_client = APIClient::new().unwrap();
+    // let shardy = api_client.get_shards();
+    // let printable_shardy = serde_json::to_string_pretty(&shardy).unwrap();
+    // println!("shardy = {}", printable_shardy);
 
     // let shards = get_shards();
     // let printable_shards = serde_json::to_string_pretty(&shards).unwrap();
