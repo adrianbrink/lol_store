@@ -49,7 +49,7 @@ impl UniqueQueue {
     }
 
     pub fn push(&self, value: String) {
-        unimplemented!();
+        let _ = self.connection.sadd::<_, _, i32>(&self.key_name, value);
     }
 
     pub fn pop(&self) -> String {
