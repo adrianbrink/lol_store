@@ -4,8 +4,6 @@
 
 
 #TODO
-- deserialize the featured games and add all involved summoner ids to SummonerUniqueQueue
-
 - implement the matchlist endpoint and store each matchId in MatchUniqueQueue
     - that are RANKED, 5v5 and in 2016
 
@@ -94,3 +92,5 @@ ConnectionManager {
             }
         }
     - implement this in my redis_connection.rs with RedisConnector
+
+- deserialize the featured games and add all involved summoner ids to SummonerUniqueQueue
