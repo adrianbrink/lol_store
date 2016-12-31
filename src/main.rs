@@ -12,6 +12,9 @@ fn main() {
 
     let api_client = APIClient::new().unwrap();
 
+    let match_ids = api_client.get_match_ids("19861577".to_string());
+    println!("{:?}", match_ids);
+
     let featured_games = api_client.get_featured_games();
     let mut summoners_1 = featured_games.game_list
         .into_iter()

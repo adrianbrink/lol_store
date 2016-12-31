@@ -7,15 +7,13 @@ mod unique_queue {
     use super::*;
     fn new_unique_queue() -> UniqueQueue {
         let redis = RedisConnector::new().unwrap();
-        let queue = UniqueQueue::new(redis.connection, "summoner_id".to_string());
-        queue
+        UniqueQueue::new(redis.connection, "summoner_id".to_string())
     }
 
     #[test]
     fn push_value_onto_queue() {
         let queue = new_unique_queue();
-        let x = queue.push("1".to_string());
-        println!("{}", x);
+        // let x = queue.push("1".to_string());
         // assert_eq!("1".to_string(), queue.pop());
     }
 
@@ -23,7 +21,7 @@ mod unique_queue {
     #[ignore]
     fn pop_value_from_queue() {
         let queue = new_unique_queue();
-        queue.push("1".to_string());
+        // queue.push("1".to_string());
         // assert_eq!(queue.pop(), "1".to_string());
     }
 }
