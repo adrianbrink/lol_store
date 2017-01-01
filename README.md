@@ -4,9 +4,6 @@
 
 
 #TODO
-- implement the matchlist endpoint and store each matchId in MatchUniqueQueue
-    - that are RANKED, 5v5 and in 2016
-
 - implement the match endpoint to get data for every game
     - add involved summoner ids to UniqueQueue
     - store the results in Postgres
@@ -17,6 +14,12 @@
 - start by writing tests for the functionality I want
 - implement the RateLimiter
 - implement the APIClient
+- rewrite the pipelines using futures and multiple threads, but first finish an entire server to run
+    - big the best of these libraries
+        - https://github.com/nikomatsakis/rayon
+            - most likely this one, since it offers work stealing queues
+        - https://github.com/alexcrichton/futures-rs
+        - https://github.com/aturon/crossbeam
 
 #The goal:
 A small server utility that downloads data from the league api and stores it in a postgres database for future analysis.
@@ -92,5 +95,6 @@ ConnectionManager {
             }
         }
     - implement this in my redis_connection.rs with RedisConnector
-
 - deserialize the featured games and add all involved summoner ids to SummonerUniqueQueue
+- implement the matchlist endpoint and store each matchId in MatchUniqueQueue
+    - that are RANKED, 5v5 and in 2016
