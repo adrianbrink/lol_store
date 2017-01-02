@@ -1,79 +1,39 @@
-extern crate redis;
-extern crate dotenv;
-
 use dotenv::dotenv;
 use std::env;
-use redis::{Client, Commands, Connection};
+use redis::{Client, Commands, Connection, RedisError};
 
 pub struct RedisConnector {
-    database_url: String,
-    pub connection: Connection,
+    connection: Connection,
 }
 
 impl RedisConnector {
-    pub fn new() -> Option<RedisConnector> {
+    pub fn new() -> Result<RedisConnector, RedisConnectorError> {
         dotenv().ok();
-        match env::var("REDIS_DATABASE_URL") {
-            Ok(val) => {
-                match Client::open(val.as_str()) {
-                    Ok(client) => {
-                        match client.get_connection() {
-                            Ok(conn) => {
-                                Some(RedisConnector {
-                                    database_url: val,
-                                    connection: conn,
-                                })
-                            }
-                            Err(_) => None,
-                        }
-                    }
-                    Err(_) => None,
-                }
-            }
-            Err(_) => None,
-        }
+        let url = env::var("REDIS_DATABASE_URL")?;
+        let client = Client::open(url.as_str())?;
+        let conn = client.get_connection()?;
+        Ok(RedisConnector { connection: conn })
+    }
+
+    pub fn get_connection(&self) -> &Connection {
+        &self.connection
     }
 }
 
-pub struct UniqueQueue {
-    connection: Connection,
-    key_name: String,
-    set_name: String,
-    list_name: String,
+#[derive(Debug)]
+pub enum RedisConnectorError {
+    Var(env::VarError),
+    Redis(RedisError),
 }
 
-impl UniqueQueue {
-    pub fn new(connection: Connection, name: String) -> UniqueQueue {
-        let set = format!("{}_set", &name);
-        let list = format!("{}_list", &name);
-        UniqueQueue {
-            connection: connection,
-            key_name: name,
-            set_name: set,
-            list_name: list,
-        }
+impl From<env::VarError> for RedisConnectorError {
+    fn from(err: env::VarError) -> RedisConnectorError {
+        RedisConnectorError::Var(err)
     }
+}
 
-    // This should panic when the Result from adding to the set is Err,
-    // because it implies that the connection isn't set up properly.
-    // TODO - make this an atomic operation
-    pub fn push(&self, value: i64) -> i32 {
-        let x = self.connection.sadd::<_, _, i32>(&self.set_name, value).unwrap();
-        if x == 1 {
-            self.connection.rpush::<_, _, i32>(&self.list_name, value).unwrap();
-        }
-        x
-    }
-
-    // TODO - make this an atomic operation
-    pub fn pop(&self) -> Option<i32> {
-        let x = self.connection.lpop::<_, i32>(&self.list_name);
-        match x {
-            Ok(val) => {
-                let _ = self.connection.srem::<_, _, i32>(&self.set_name, val).unwrap();
-                Some(val)
-            }
-            Err(_) => None,
-        }
+impl From<RedisError> for RedisConnectorError {
+    fn from(err: RedisError) -> RedisConnectorError {
+        RedisConnectorError::Redis(err)
     }
 }

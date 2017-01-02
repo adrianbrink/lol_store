@@ -6,6 +6,9 @@
 
 
 #TODO
+Simpliest case:
+- Just download matchId and matchDuration continously
+- One thread fills the match
 - implement the match endpoint to get data for every game
     - add involved summoner ids to UniqueQueue
     - store the results in Postgres

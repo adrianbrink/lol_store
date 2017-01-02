@@ -1,14 +1,15 @@
-extern crate diesel;
-
 use super::schema::matchdetails;
 use diesel::prelude::*;
 use diesel::pg::PgConnection;
 use diesel::result;
+use diesel;
 
-#[derive(Debug, Insertable, Queryable)]
+#[derive(Debug, Deserialize, Insertable, Serialize, Queryable)]
 #[table_name="matchdetails"]
 pub struct MatchDetail {
+    #[serde(rename="matchId")]
     pub match_id: i64,
+    #[serde(rename="matchDuration")]
     pub match_duration: i64,
 }
 

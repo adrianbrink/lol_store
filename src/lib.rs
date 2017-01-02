@@ -1,29 +1,33 @@
 #![feature(proc_macro)]
 
-extern crate dotenv;
-extern crate hyper;
-extern crate serde_json;
 #[macro_use]
 extern crate serde_derive;
 #[macro_use]
 extern crate diesel;
 #[macro_use]
 extern crate diesel_codegen;
+extern crate dotenv;
 extern crate redis;
 
-// pub mod league_api;
 pub mod postgres_connection;
 pub mod redis_connection;
 pub mod models;
 pub mod schema;
+pub mod unique_redis_queue;
 
-use diesel::prelude::*;
-use diesel::pg::PgConnection;
-use dotenv::dotenv;
-use std::env;
-use hyper::Client;
-use std::io::Read;
-use redis::Commands;
+// extern crate hyper;
+// extern crate serde_json;
+
+// pub mod league_api;
+
+
+// use diesel::prelude::*;
+// use diesel::pg::PgConnection;
+// use dotenv::dotenv;
+// use std::env;
+// use hyper::Client;
+// use std::io::Read;
+// use redis::Commands;
 
 // TODO
 // - refactor to group this into a struct
