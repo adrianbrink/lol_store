@@ -8,14 +8,15 @@ extern crate diesel;
 extern crate diesel_codegen;
 extern crate dotenv;
 extern crate redis;
+extern crate hyper;
 
 pub mod postgres_connection;
 pub mod redis_connection;
 pub mod models;
 pub mod schema;
 pub mod unique_redis_queue;
+pub mod league_api;
 
-// extern crate hyper;
 // extern crate serde_json;
 
 // pub mod league_api;
