@@ -1,3 +1,5 @@
+extern crate serde_json;
+
 use super::schema::matchdetails;
 use diesel::prelude::*;
 use diesel::pg::PgConnection;
@@ -19,46 +21,30 @@ impl MatchDetail {
     }
 }
 
-// extern crate serde_json;
 
-// #[derive(Serialize, Deserialize, Debug)]
-// pub struct FeaturedGames {
-//     #[serde(rename="clientRefreshInterval")]
-//     pub client_refresh_interval: i64,
-//     #[serde(rename="gameList")]
-//     pub game_list: Vec<FeaturedGame>,
-// }
+#[derive(Serialize, Deserialize, Debug)]
+pub struct FeaturedGames {
+    #[serde(rename="clientRefreshInterval")]
+    pub client_refresh_interval: i64,
+    #[serde(rename="gameList")]
+    pub game_list: Vec<FeaturedGameInfo>,
+}
 
-// #[derive(Serialize, Deserialize, Debug)]
-// pub struct FeaturedGame {
-//     #[serde(rename="gameId")]
-//     pub game_id: i64,
-//     #[serde(rename="participants")]
-//     pub participants: Vec<Participant>,
-// }
+#[derive(Serialize, Deserialize, Debug)]
+pub struct FeaturedGameInfo {
+    pub participants: Vec<Participant>,
+}
 
-// #[derive(Serialize, Deserialize, Debug)]
-// pub struct Participant {
-//     pub bot: bool,
-//     #[serde(rename="championId")]
-//     pub champion_id: i64,
-//     #[serde(rename="profileIconId")]
-//     pub profile_icon_id: i64,
-//     #[serde(rename="spell1Id")]
-//     pub spell_1_id: i64,
-//     #[serde(rename="spell2Id")]
-//     pub spell_2_id: i64,
-//     #[serde(rename="summonerName")]
-//     pub summoner_name: String,
-//     #[serde(rename="teamId")]
-//     pub team_id: i64,
-// }
+#[derive(Serialize, Deserialize, Debug)]
+pub struct Participant {
+    #[serde(rename="summonerName")]
+    pub summoner_name: String,
+}
 
-// #[derive(Serialize, Deserialize, Debug)]
-// pub struct Summoner {
-//     pub id: i64,
-//     pub name: String,
-// }
+#[derive(Serialize, Deserialize, Debug)]
+pub struct Summoner {
+    pub id: i64,
+}
 
 // #[derive(Serialize, Deserialize, Debug)]
 // pub struct MatchList {

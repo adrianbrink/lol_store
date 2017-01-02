@@ -1,3 +1,4 @@
+use redis;
 use redis::{Commands, Connection};
 
 pub struct UniqueQueue<'a> {
@@ -22,6 +23,7 @@ impl<'a> UniqueQueue<'a> {
     // This should panic when the Result from adding to the set is Err,
     // because it implies that the connection isn't set up properly.
     // TODO - make this an atomic operation
+    // https://mitsuhiko.github.io/redis-rs/redis/fn.transaction.html
     pub fn push(&self, value: i64) -> i64 {
         let x = self.connection.sadd::<_, _, i64>(&self.set_name, value).unwrap();
         if x == 1 {
@@ -31,6 +33,7 @@ impl<'a> UniqueQueue<'a> {
     }
 
     // TODO - make this an atomic operation
+    // https://mitsuhiko.github.io/redis-rs/redis/fn.transaction.html
     pub fn pop(&self) -> Option<i64> {
         let x = self.connection.lpop::<_, i64>(&self.list_name);
         match x {

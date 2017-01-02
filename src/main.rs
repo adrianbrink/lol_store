@@ -21,41 +21,46 @@ fn main() {
     let summoner_queue = UniqueQueue::new(&redis_connection, "summoner".to_string());
     let match_queue = UniqueQueue::new(&redis_connection, "match".to_string());
 
+    let summoner_ids = api_client.get_summoner_seed();
+    summoner_ids.into_iter()
+        .map(|id| summoner_queue.push(id))
+        .collect::<Vec<i64>>();
+
     // TODO - instead of doing this all in one loop this should be multi-threaded
     // one thread that only fills the summoner_queue
     // one thread that only requests the match ids and fills the match_queue
     // one thread that gets the match data and writes it into postgres
     // the queues should block until a new value is available
-    loop {
-        if !match_queue.is_empty() {
-            println!("Match Queue has a match id and hence we will fetch the data and store it \
-                      in postgres.");
-            continue;
-        }
-        if match_queue.is_empty() {
-            println!("Summoner Queue is not empty anymore but the Match Queue is still empty. We \
-                      will take the first summoner id and get all their matches.");
-            match summoner_queue.pop() {
-                Some(id) => {
-                    let match_ids = api_client.get_matchlist(id);
-                    match_ids.into_iter()
-                        .map(|match_id| match_queue.push(match_id))
-                        .collect::<Vec<i64>>();
-                    continue;
-                }
-                None => continue,
-            }
-        }
-        if summoner_queue.is_empty() {
-            println!("There are no summoners and hence we will fetch the featured games to get a \
-                      seed of summoner ids.");
-            let summoner_ids = api_client.get_summoner_seed();
-            summoner_ids.into_iter()
-                .map(|id| summoner_queue.push(id))
-                .collect::<Vec<i64>>();
-            continue;
-        }
-    }
+    // loop {
+    //     if !match_queue.is_empty() {
+    //         println!("Match Queue has a match id and hence we will fetch the data and store it \
+    //                   in postgres.");
+    //         continue;
+    //     }
+    //     if match_queue.is_empty() {
+    //         println!("Summoner Queue is not empty anymore but the Match Queue is still empty. We \
+    //                   will take the first summoner id and get all their matches.");
+    //         match summoner_queue.pop() {
+    //             Some(id) => {
+    //                 let match_ids = api_client.get_matchlist(id);
+    //                 match_ids.into_iter()
+    //                     .map(|match_id| match_queue.push(match_id))
+    //                     .collect::<Vec<i64>>();
+    //                 continue;
+    //             }
+    //             None => continue,
+    //         }
+    //     }
+    //     if summoner_queue.is_empty() {
+    //         println!("There are no summoners and hence we will fetch the featured games to get a \
+    //                   seed of summoner ids.");
+    //         let summoner_ids = api_client.get_summoner_seed();
+    //         summoner_ids.into_iter()
+    //             .map(|id| summoner_queue.push(id))
+    //             .collect::<Vec<i64>>();
+    //         continue;
+    //     }
+    // }
 }
 
 
