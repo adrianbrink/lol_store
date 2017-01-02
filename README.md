@@ -1,3 +1,5 @@
+[![](https://tokei.rs/b1/github/adrianbrink/lol_store)](https://github.com/adrianbrink/lol_store)
+
 - figure out how to save foreign keys with diesel
     - for example, I should be able to save Games directly and the included vector get saved to a different table with the
     proper mapping using a foreign keys
