@@ -1,3 +1,23 @@
+extern crate diesel;
+
+use super::schema::matchdetails;
+use diesel::prelude::*;
+use diesel::pg::PgConnection;
+use diesel::result;
+
+#[derive(Debug, Insertable, Queryable)]
+#[table_name="matchdetails"]
+pub struct MatchDetail {
+    pub match_id: i64,
+    pub match_duration: i64,
+}
+
+impl MatchDetail {
+    pub fn save(self, conn: &PgConnection) -> Result<MatchDetail, result::Error> {
+        diesel::insert(&self).into(matchdetails::table).get_result(conn)
+    }
+}
+
 // extern crate serde_json;
 
 // #[derive(Serialize, Deserialize, Debug)]

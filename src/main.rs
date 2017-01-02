@@ -1,14 +1,25 @@
 extern crate lol_store;
 extern crate serde_json;
 
+use self::lol_store::postgres_connection::PostgresConnector;
 // use self::lol_store::*;
-// use self::lol_store::models::*;
+use self::lol_store::models::MatchDetail;
 // use self::lol_store::league_api::*;
-use lol_store::redis_connection::{RedisConnector, UniqueQueue};
+// use lol_store::redis_connection::{RedisConnector, UniqueQueue};
 
 
 fn main() {
     println!("Hello, world!");
+
+    // TODO - this should be handled with .map_err(), but for that PostgresConnector needs to implement std::fmt::Display.
+    let postgres_connector = PostgresConnector::new().expect("Database connection failed");
+    let connection = postgres_connector.get_connection();
+
+    let match_details = MatchDetail {
+        match_id: 1,
+        match_duration: 1,
+    };
+    match_details.save(&connection);
 
     // let api_client = APIClient::new().unwrap();
 

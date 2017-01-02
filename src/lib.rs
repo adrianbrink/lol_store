@@ -14,8 +14,8 @@ extern crate redis;
 // pub mod league_api;
 pub mod postgres_connection;
 pub mod redis_connection;
-// pub mod models;
-// pub mod schema;
+pub mod models;
+pub mod schema;
 
 use diesel::prelude::*;
 use diesel::pg::PgConnection;

@@ -6,27 +6,8 @@ use std::env;
 use diesel::prelude::*;
 use diesel::pg::PgConnection;
 
-#[derive(Debug)]
 pub struct PostgresConnector {
     pub connection: PgConnection,
-}
-
-#[derive(Debug)]
-pub enum PostgresConnectorError {
-    Var(env::VarError),
-    Diesel(ConnectionError),
-}
-
-impl From<env::VarError> for PostgresConnectorError {
-    fn from(err: env::VarError) -> PostgresConnectorError {
-        PostgresConnectorError::Var(err)
-    }
-}
-
-impl From<ConnectionError> for PostgresConnectorError {
-    fn from(err: ConnectionError) -> PostgresConnectorError {
-        PostgresConnectorError::Diesel(err)
-    }
 }
 
 impl PostgresConnector {
@@ -72,4 +53,22 @@ impl PostgresConnector {
     //         .get_results(&self.connection)
     //         .expect("Error saving new games.")
     // }
+}
+
+#[derive(Debug)]
+pub enum PostgresConnectorError {
+    Var(env::VarError),
+    Diesel(ConnectionError),
+}
+
+impl From<env::VarError> for PostgresConnectorError {
+    fn from(err: env::VarError) -> PostgresConnectorError {
+        PostgresConnectorError::Var(err)
+    }
+}
+
+impl From<ConnectionError> for PostgresConnectorError {
+    fn from(err: ConnectionError) -> PostgresConnectorError {
+        PostgresConnectorError::Diesel(err)
+    }
 }

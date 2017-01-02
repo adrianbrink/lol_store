@@ -1,4 +1,4 @@
 CREATE TABLE MatchDetails (
-    matchId SERIAL PRIMARY KEY,
-    matchDuration BIGINT NOT NULL
+    match_id BIGSERIAL PRIMARY KEY,
+    match_duration BIGINT NOT NULL
 )
