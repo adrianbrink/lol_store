@@ -6,32 +6,35 @@ use std::env;
 use diesel::prelude::*;
 use diesel::pg::PgConnection;
 
+#[derive(Debug)]
 pub struct PostgresConnector {
     pub connection: PgConnection,
 }
 
+#[derive(Debug)]
+pub enum PostgresConnectorError {
+    Var(env::VarError),
+    Diesel(ConnectionError),
+}
+
+impl From<env::VarError> for PostgresConnectorError {
+    fn from(err: env::VarError) -> PostgresConnectorError {
+        PostgresConnectorError::Var(err)
+    }
+}
+
+impl From<ConnectionError> for PostgresConnectorError {
+    fn from(err: ConnectionError) -> PostgresConnectorError {
+        PostgresConnectorError::Diesel(err)
+    }
+}
+
 impl PostgresConnector {
-    pub fn new() -> Option<PostgresConnector> {
+    pub fn new() -> Result<PostgresConnector, PostgresConnectorError> {
         dotenv().ok();
-        env::var("POSTGRES_DATABASE_URL")
-            .ok()
-            .and_then(|url| PgConnection::establish(&url).ok())
-            .and_then(|conn| Some(PostgresConnector { connection: conn }))
-        // env::var("POSTGRES_DATABASE_URL").and_then(|url| PgConnection::establish(&url)).and_then(|conn| Some(PostgresConnector { database_url: url, connection: conn, }))
-        // match env::var("POSTGRES_DATABASE_URL") {
-        //     Ok(val) => {
-        //         match PgConnection::establish(&val) {
-        //             Ok(conn) => {
-        //                 Some(PostgresConnector {
-        //                     database_url: val,
-        //                     connection: conn,
-        //                 })
-        //             }
-        //             Err(_) => None,
-        //         }
-        //     }
-        //     Err(_) => None,
-        // }
+        let url = env::var("POSTGRES_DATABASE_URL")?;
+        let conn = PgConnection::establish(&url)?;
+        Ok(PostgresConnector { connection: conn })
     }
 
     pub fn get_connection(&self) -> &PgConnection {
