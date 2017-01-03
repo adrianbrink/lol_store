@@ -1,46 +1,31 @@
 [![](https://tokei.rs/b1/github/adrianbrink/lol_store)](https://github.com/adrianbrink/lol_store)
 
-- figure out how to save foreign keys with diesel
-    - for example, I should be able to save Games directly and the included vector get saved to a different table with the
-    proper mapping using a foreign keys
-
-
 #TODO
-Simpliest case:
-- Just download matchId and matchDuration continously
-- One thread fills the match
-- implement the match endpoint to get data for every game
-    - add involved summoner ids to UniqueQueue
-    - store the results in Postgres
-        - every field of type vec is a new table and every object of the game type that contains a vec creates a new row in one
-        of the other tables
-        - maintain a set of all matchIds that I've already downloaded
-
-- start by writing tests for the functionality I want
-- implement the RateLimiter
-- implement the APIClient
-- rewrite the pipelines using futures and multiple threads, but first finish an entire server to run
-    - big the best of these libraries
-        - https://github.com/nikomatsakis/rayon
-            - most likely this one, since it offers work stealing queues
-        - https://github.com/alexcrichton/futures-rs
-        - https://github.com/aturon/crossbeam
+1. dockerize the entire application, so that I can just say 'docker compose up' to run it
+    - then figure out how to do automatic deploys to a server on every merge to master
+    - Make it print out hello over and over again and confirm that by connecting to the docker box
+    running in production.
+2. write the RateLimiter
+    - simple counter that easier allows the call or doesn't
+3. switch to 2 redis sets for summoner_queue and match_queue
+    - 1st set contains the items to visit, 2nd set contains the items already visited
+    - when adding a new item, check the 2nd first and then add it
+    - when removing an item, add it to the 2nd set
+    - need to be atomic updates to both
+3. switch to multi-threaded, run the get_featured_games() in a separate thread
+    - should check after the interval again and only if the RateLimiter allows
+4. switch get_matchlist() to multi-threaded
+    - should grap a random item from summoner_queue and get the matches for that summoner
+    - check only execute if the RateLimiter allows it
+5. switch get_match() to multi-threaded
+    - should grap a random item from match_queue and get the duration and all involved summoners
+    - add duration and match_id to postgres
+    - add all involved summoners to summoner_queue
+    - should only execute if the RateLimiter allows it
 
 #The goal:
-A small server utility that downloads data from the league api and stores it in a postgres database for future analysis.
-
-#The process:
-The program contacts the league api up to the rate limit and can also work with multiple api keys to further increase the limit.
-It starts with the featured games, and then stores all the data in postgres while storing the summoner id's in a queue using
-redis. Then it takes the first summoner id from the queue and pulls all game data for that id. From those games it extracts the
-summoner ids and adds them to the unique queue. Then it runs indefinitely.
-
-#How to get the data
-- everything just for EUW and SEASON2016
-- get one summoner -> get all games with matchlist -> get data for every game with match -> extract all summoners in those games
--> repeat the process
-- when redis queue is empty just check every 30 seconds, then I can manually resupply the queue
-    - needed in case there is no overlap between leagues
+A small server utility that downloads data from the league api and stores it in a postgres
+database for future analysis.
 
 #The design:
 RateLimiter {
