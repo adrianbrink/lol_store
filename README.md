@@ -1,5 +1,9 @@
 [![](https://tokei.rs/b1/github/adrianbrink/lol_store)](https://github.com/adrianbrink/lol_store)
 
+#The goal:
+A small server utility that downloads data from the league api and stores it in a postgres
+database for future analysis.
+
 #TODO
 1. dockerize the entire application, so that I can just say 'docker compose up' to run it
     - then figure out how to do automatic deploys to a server on every merge to master
@@ -17,16 +21,14 @@
 4. switch get_matchlist() to multi-threaded
     - should grap a random item from summoner_queue and get the matches for that summoner
     - check only execute if the RateLimiter allows it
-5. switch get_match() to multi-threaded
+5. switch get_match() to <multi-threaded></multi-threaded>
     - should grap a random item from match_queue and get the duration and all involved summoners
     - add duration and match_id to postgres
     - add all involved summoners to summoner_queue
     - should only execute if the RateLimiter allows it
 
-#The goal:
-A small server utility that downloads data from the league api and stores it in a postgres
-database for future analysis.
 
+** Outdated **
 #The design:
 RateLimiter {
 - an object that schedules the execution of tasks and limits the throughput
