@@ -9,6 +9,7 @@ database for future analysis.
     - then figure out how to do automatic deploys to a server on every merge to master
     - Make it print out hello over and over again and confirm that by connecting to the docker box
     running in production.
+    - ensure that codeship can run all my tests and otherwise it doesn't allow me to merge
 2. write the RateLimiter
     - simple counter that easier allows the call or doesn't
 3. switch to 2 redis sets for summoner_queue and match_queue
