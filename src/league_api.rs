@@ -12,6 +12,8 @@ pub struct APIClient {
     hyper_client: Client, // base_url: String,
 }
 
+// Move the exposed methods into a trait and then implement the trait. This way one can pass
+// a testable API client that just implements the interface.
 impl APIClient {
     pub fn new() -> Result<APIClient, env::VarError> {
         dotenv().ok();
