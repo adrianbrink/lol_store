@@ -46,16 +46,16 @@ pub struct Summoner {
     pub id: i64,
 }
 
-// #[derive(Serialize, Deserialize, Debug)]
-// pub struct MatchList {
-//     pub matches: Vec<MatchReference>,
-// }
+#[derive(Serialize, Deserialize, Debug)]
+pub struct MatchList {
+    pub matches: Vec<MatchReference>,
+}
 
-// #[derive(Serialize, Deserialize, Debug)]
-// pub struct MatchReference {
-//     #[serde(rename="matchId")]
-//     pub match_id: i64,
-// }
+#[derive(Serialize, Deserialize, Debug)]
+pub struct MatchReference {
+    #[serde(rename="matchId")]
+    pub match_id: i64,
+}
 
 
 // This is old - deprecated

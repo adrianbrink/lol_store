@@ -21,10 +21,8 @@ fn main() {
     let summoner_queue = UniqueQueue::new(&redis_connection, "summoner".to_string());
     let match_queue = UniqueQueue::new(&redis_connection, "match".to_string());
 
-    let summoner_ids = api_client.get_summoner_seed();
-    summoner_ids.into_iter()
-        .map(|id| summoner_queue.push(id))
-        .collect::<Vec<i64>>();
+    let match_ids = api_client.get_matchlist(58889103);
+    println!("{:?}", match_ids.len());
 
     // TODO - instead of doing this all in one loop this should be multi-threaded
     // one thread that only fills the summoner_queue

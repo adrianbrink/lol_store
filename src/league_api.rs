@@ -3,7 +3,7 @@ extern crate serde_json;
 use hyper::Client;
 use dotenv::dotenv;
 use std::env;
-use super::models::{FeaturedGames, Participant, Summoner};
+use super::models::{FeaturedGames, Participant, Summoner, MatchList};
 use std::io::Read;
 use std::collections::BTreeMap;
 
@@ -39,8 +39,23 @@ impl APIClient {
 
     pub fn get_matchlist(&self, summoner_id: i64) -> Vec<i64> {
         // This returns a vector of match ids for the given summoner.
-        vec![2995897557]
+        let match_data = self.request_get_matchlist(summoner_id);
+        let match_list: MatchList = serde_json::from_str(&match_data).unwrap();
+        match_list.matches.into_iter().map(|match_| match_.match_id).collect::<Vec<i64>>()
+    }
 
+    fn request_get_matchlist(&self, summoner_id: i64) -> String {
+        let request_url = format!("https://euw.api.pvp.net/api/lol/euw/v2.\
+                                   2/matchlist/by-summoner/{}?rankedQueues=RANKED_FLEX_SR,\
+                                   RANKED_SOLO_5x5,RANKED_TEAM_3x3,RANKED_TEAM_5x5,\
+                                   TEAM_BUILDER_DRAFT_RANKED_5x5,\
+                                   TEAM_BUILDER_RANKED_SOLO&seasons=SEASON2016&api_key={}",
+                                  summoner_id,
+                                  self.api_key);
+        let mut req = self.hyper_client.get(&request_url).send().expect("API call failed.");
+        let mut res = String::new();
+        let _ = req.read_to_string(&mut res);
+        res
     }
 
     fn request_get_featured_games(&self) -> String {
@@ -64,6 +79,13 @@ impl APIClient {
             .collect::<Vec<i64>>()
     }
 
+    fn create_request_url_for_get_summoner_ids(&self, summoner_names: Vec<String>) -> String {
+        let names = summoner_names.join(",");
+        format!("https://euw.api.pvp.net/api/lol/euw/v1.4/summoner/by-name/{}?api_key={}",
+                names,
+                self.api_key)
+    }
+
     fn request_get_summoner_ids(&self, request_url: &String) -> Vec<i64> {
         let mut req = self.hyper_client.get(request_url).send().expect("API call failed.");
         let mut res = String::new();
@@ -72,12 +94,6 @@ impl APIClient {
         summoners.into_iter().map(|(_, summoner)| summoner.id).collect::<Vec<i64>>()
     }
 
-    fn create_request_url_for_get_summoner_ids(&self, summoner_names: Vec<String>) -> String {
-        let names = summoner_names.join(",");
-        format!("https://euw.api.pvp.net/api/lol/euw/v1.4/summoner/by-name/{}?api_key={}",
-                names,
-                self.api_key)
-    }
 
     // fn get_summoner_ids(&self, summoner_names: Vec<String>) -> Vec<i64> {
     //     let data = self.request_get_summoner_ids(summoner_names);
@@ -87,22 +103,6 @@ impl APIClient {
     //         .map(|(_, summoner)| summoner.id)
     //         .collect::<Vec<i64>>()
     // }
-
-    // pub fn request_get_matchlist(&self, summoner_id: String) -> String {
-    //     let request_url = format!("https://euw.api.pvp.net/api/lol/euw/v2.\
-    //                                2/matchlist/by-summoner/{}?rankedQueues=RANKED_FLEX_SR,\
-    //                                RANKED_SOLO_5x5,RANKED_TEAM_3x3,RANKED_TEAM_5x5,\
-    //                                TEAM_BUILDER_DRAFT_RANKED_5x5,\
-    //                                TEAM_BUILDER_RANKED_SOLO&seasons=SEASON2016&api_key={}",
-    //                               summoner_id,
-    //                               self.api_key);
-    //     let mut req = self.hyper_client.get(&request_url).send().expect("API call failed.");
-    //     let mut res = String::new();
-    //     let _ = req.read_to_string(&mut res);
-    //     res
-    // }
-
-
 
     // pub fn request_get_shards(&self) -> String {
     //     let mut req = self.hyper_client
