@@ -4,6 +4,11 @@
 A small server utility that downloads data from the league api and stores it in a postgres
 database for future analysis.
 
+#How to run
+docker-compose up
+docker build -t lol_store .
+docker run --rm -it -v $(pwd):/source --network lolstore_default lol_store /bin/bash
+
 #TODO
 1. dockerize the entire application, so that I can just say 'docker compose up' to run it
     - start by creating a new test application that only uses redis, postgres and prints to
