@@ -8,8 +8,10 @@ machine:
 dependencies:
     override:
         - docker info
+    post:
+        - diesel setup
+        - diesel migration run
 
 test:
     override:
         - docker-compose -f docker-compose.circleci.yml up
-        - docker-compose exec lol_store cargo test

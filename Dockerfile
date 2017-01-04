@@ -10,5 +10,3 @@ ENV PATH="/root/.cargo/bin:${PATH}"
 RUN mkdir -p /source
 ADD . /source
 WORKDIR /source
-
-CMD ["cargo", "run"]

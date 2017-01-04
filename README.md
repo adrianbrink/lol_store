@@ -5,7 +5,7 @@ A small server utility that downloads data from the league api and stores it in 
 database for future analysis.
 
 #How to run
-docker-compose up
+docker-compose -f docker-compose.dev.yml up
 docker build -t lol_store .
 docker run --rm -it -v $(pwd):/source --network lolstore_default lol_store /bin/bash
 

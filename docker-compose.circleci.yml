@@ -13,6 +13,7 @@ services:
         depends_on: 
             - 'redis'
             - 'postgres'
+        command: 'cargo test'
         build: .
         volumes: 
             - '.:/source'
