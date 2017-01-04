@@ -17,9 +17,8 @@ services:
     lol_store:
         depends_on: 
             - 'redis'
-            - 'postgres'
             - 'migration'
-        command: 'cargo test'
+        command: bash -c "sleep 15 && cargo test"
         build: .
         volumes: 
             - '.:/source'

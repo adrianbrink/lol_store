@@ -10,7 +10,7 @@ pub struct PostgresConnector {
 impl PostgresConnector {
     pub fn new() -> Result<PostgresConnector, PostgresConnectorError> {
         dotenv().ok();
-        let url = env::var("DATABASE_URL")?;
+        let url = env::var("postgres://postgres@postgres/lol_store")?;
         let conn = PgConnection::establish(&url)?;
         Ok(PostgresConnector { connection: conn })
     }

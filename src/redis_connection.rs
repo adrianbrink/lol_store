@@ -9,7 +9,7 @@ pub struct RedisConnector {
 impl RedisConnector {
     pub fn new() -> Result<RedisConnector, RedisConnectorError> {
         dotenv().ok();
-        let url = env::var("REDIS_DATABASE_URL")?;
+        let url = env::var("redis://redis/")?;
         let client = Client::open(url.as_str())?;
         let conn = client.get_connection()?;
         Ok(RedisConnector { connection: conn })
