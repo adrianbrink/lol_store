@@ -11,7 +11,7 @@ services:
             - 'postgres:/var/lib/postgresql/data'
     migration:
         build: .
-        command: bash -c "sleep 10 && diesel setup --database-url postgres://postgres@postgres/lol_store && diesel migration run"
+        command: bash -c "sleep 10 && diesel setup --database-url='postgres://postgres@postgres/lol_store' && diesel migration run"
         depends_on: 
             - 'postgres'
     lol_store:
