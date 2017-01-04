@@ -6,10 +6,19 @@ database for future analysis.
 
 #TODO
 1. dockerize the entire application, so that I can just say 'docker compose up' to run it
+    - start by creating a new test application that only uses redis, postgres and prints to
+    the console
+    - use a shell script to configure the build environment, it should run `diesel migration run`
+    and then `cargo run`
+        - this should be the last command in the Dockerfile
     - then figure out how to do automatic deploys to a server on every merge to master
     - Make it print out hello over and over again and confirm that by connecting to the docker box
     running in production.
     - ensure that codeship can run all my tests and otherwise it doesn't allow me to merge
+    Problems:
+        - switch to docker entries in /etc/hosts to connect to the containers
+        - research how migrations are run
+        - CircleCI should run 'cargo test' and only then build and 
 2. write the RateLimiter
     - simple counter that easier allows the call or doesn't
 3. switch to 2 redis sets for summoner_queue and match_queue
@@ -28,6 +37,14 @@ database for future analysis.
     - add all involved summoners to summoner_queue
     - should only execute if the RateLimiter allows it
 
+
+# Potential development workflow
+- in the morning run `docker-compose up` and then connect to the running shell
+- then write some code, go the shell with the container and run `cargo build`
+- be happy with the changes and in a normal shell commit everything and then push it
+to development
+- CircleCI gets triggered and runs `cargo test`, if successful it merges it into
+master
 
 ** Outdated **
 #The design:
