@@ -13,5 +13,5 @@ dependencies:
 test:
     override:
         # - docker run adrianbrink/lol_store cargo test
-        - docker-compose up
+        - docker-compose up -f docker-compose.circleci.yml
         - docker-compose exec lol_store cargo test
