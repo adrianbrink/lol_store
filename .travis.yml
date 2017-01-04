@@ -1,0 +1,12 @@
+language: rust
+sudo: required
+dist: trusty
+rust:
+  - stable
+  - beta
+  - nightly
+cache: cargo
+services:
+  - docker
+scripts:
+  - docker-compose -f docker-compose.travis.yml up
