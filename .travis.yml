@@ -1,5 +1,6 @@
 install:
     - curl -sSL https://get.docker.com/ | sudo sh
     - sudo pip install docker-compose
-scripts:
+
+script:
     - docker-compose -f docker-compose.travis.yml up
