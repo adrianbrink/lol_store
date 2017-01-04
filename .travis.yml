@@ -1,10 +1,5 @@
-language: rust
-sudo: required
-dist: trusty
-rust:
-  - nightly
-cache: cargo
-services:
-  - docker
+install:
+    - curl -sSL https://get.docker.com/ | sudo sh
+    - sudo pip install docker-compose
 scripts:
-  - docker-compose -f docker-compose.travis.yml up
+    - docker-compose -f docker-compose.travis.yml up
