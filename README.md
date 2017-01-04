@@ -30,6 +30,7 @@ docker run --rm -it -v $(pwd):/source --network lolstore_default lol_store /bin/
 6. enable continous deployment once the server works
     - every push to development should trigger a build and on success it should merge it into master
     - every update to master causes the production environment to change and deploy the new code
+    - https://circleci.com/docs/docker/#application-deployment
 
 
 # Potential development workflow

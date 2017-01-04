@@ -9,10 +9,16 @@ services:
         image: postgres
         volumes:
             - 'postgres:/var/lib/postgresql/data'
+    migration:
+        build: .
+        command: bash -c "diesel setup && diesel migration run"
+        depends_on: 
+            - 'postgres'
     lol_store:
         depends_on: 
             - 'redis'
             - 'postgres'
+            - 'migration'
         command: 'cargo test'
         build: .
         volumes: 

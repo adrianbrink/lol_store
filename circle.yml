@@ -8,9 +8,6 @@ machine:
 dependencies:
     override:
         - docker info
-    post:
-        - diesel setup
-        - diesel migration run
 
 test:
     override:
