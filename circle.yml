@@ -8,10 +8,8 @@ machine:
 dependencies:
     override:
         - docker info
-        # - docker build --rm=false -t adrianbrink/lol_store .
 
 test:
     override:
-        # - docker run adrianbrink/lol_store cargo test
-        - docker-compose up -f docker-compose.circleci.yml
+        - docker-compose -f docker-compose.circleci.yml up
         - docker-compose exec lol_store cargo test
