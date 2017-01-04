@@ -1,19 +1,30 @@
 version: '2'
 
 services: 
-    postgres:
-        image: 'postgres'
-        ports:
-            - '5432:5432'
     redis:
         image: redis
-        ports:
+        ports: 
             - '6379:6379'
-    server:
-        build: .
-        depends_on: 
-            - 'postgres'
-            - 'redis'
-        links: 
-            - redis
-            - postgres
+        volumes: 
+            - 'redis:/var/lib/redis/data'
+    postgres:
+        image: postgres
+        ports:
+            - '5432:5432'
+        volumes:
+            - 'postgres:/var/lib/postgresql/data'
+    # lol_store:
+    #     depends_on: 
+    #         - 'redis'
+    #         - 'postgres'
+    #     build: .
+    #     command: 'cargo run'
+    #     volumes: 
+    #         - '.:/source'
+    #     links: 
+    #         - 'redis'
+    #         - 'postgres'
+
+volumes: 
+    redis:
+    postgres:
