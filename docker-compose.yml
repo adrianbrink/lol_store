@@ -13,17 +13,16 @@ services:
             - '5432:5432'
         volumes:
             - 'postgres:/var/lib/postgresql/data'
-    # lol_store:
-    #     depends_on: 
-    #         - 'redis'
-    #         - 'postgres'
-    #     build: .
-    #     command: 'cargo run'
-    #     volumes: 
-    #         - '.:/source'
-    #     links: 
-    #         - 'redis'
-    #         - 'postgres'
+    lol_store:
+        depends_on: 
+            - 'redis'
+            - 'postgres'
+        build: .
+        volumes: 
+            - '.:/source'
+        links: 
+            - 'redis'
+            - 'postgres'
 
 volumes: 
     redis:

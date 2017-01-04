@@ -10,20 +10,6 @@ docker build -t lol_store .
 docker run --rm -it -v $(pwd):/source --network lolstore_default lol_store /bin/bash
 
 #TODO
-1. dockerize the entire application, so that I can just say 'docker compose up' to run it
-    - start by creating a new test application that only uses redis, postgres and prints to
-    the console
-    - use a shell script to configure the build environment, it should run `diesel migration run`
-    and then `cargo run`
-        - this should be the last command in the Dockerfile
-    - then figure out how to do automatic deploys to a server on every merge to master
-    - Make it print out hello over and over again and confirm that by connecting to the docker box
-    running in production.
-    - ensure that codeship can run all my tests and otherwise it doesn't allow me to merge
-    Problems:
-        - switch to docker entries in /etc/hosts to connect to the containers
-        - research how migrations are run
-        - CircleCI should run 'cargo test' and only then build and 
 2. write the RateLimiter
     - simple counter that easier allows the call or doesn't
 3. switch to 2 redis sets for summoner_queue and match_queue
@@ -41,6 +27,9 @@ docker run --rm -it -v $(pwd):/source --network lolstore_default lol_store /bin/
     - add duration and match_id to postgres
     - add all involved summoners to summoner_queue
     - should only execute if the RateLimiter allows it
+6. enable continous deployment once the server works
+    - every push to development should trigger a build and on success it should merge it into master
+    - every update to master causes the production environment to change and deploy the new code
 
 
 # Potential development workflow
@@ -113,3 +102,6 @@ ConnectionManager {
 - deserialize the featured games and add all involved summoner ids to SummonerUniqueQueue
 - implement the matchlist endpoint and store each matchId in MatchUniqueQueue
     - that are RANKED, 5v5 and in 2016
+- dockerizing the application so that a simple docker-compose allows you to create all
+needed other containers, as well as docker run for easy development
+- integration with CircleCI works to run tests
