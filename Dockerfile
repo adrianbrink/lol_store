@@ -4,4 +4,4 @@ RUN mkdir -p /source
 COPY . /source
 WORKDIR /source
 
-CMD ["/bin/bash"]
+CMD ["cargo", "run"]
