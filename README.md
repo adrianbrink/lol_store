@@ -10,24 +10,25 @@ docker build -t lol_store .
 docker run --rm -it -v $(pwd):/source --network lolstore_default lol_store /bin/bash
 
 #TODO
-2. write the RateLimiter
+1. write the RateLimiter
     - simple counter that easier allows the call or doesn't
-3. switch to 2 redis sets for summoner_queue and match_queue
+2. switch to 2 redis sets for summoner_queue and match_queue
     - 1st set contains the items to visit, 2nd set contains the items already visited
     - when adding a new item, check the 2nd first and then add it
     - when removing an item, add it to the 2nd set
     - need to be atomic updates to both
-3. switch to multi-threaded, run the get_featured_games() in a separate thread
+3. get the integration with travis to work properly so that travis can run all my tests
+4. switch to multi-threaded, run the get_featured_games() in a separate thread
     - should check after the interval again and only if the RateLimiter allows
-4. switch get_matchlist() to multi-threaded
+5. switch get_matchlist() to multi-threaded
     - should grap a random item from summoner_queue and get the matches for that summoner
     - check only execute if the RateLimiter allows it
-5. switch get_match() to <multi-threaded></multi-threaded>
+6. switch get_match() to <multi-threaded></multi-threaded>
     - should grap a random item from match_queue and get the duration and all involved summoners
     - add duration and match_id to postgres
     - add all involved summoners to summoner_queue
     - should only execute if the RateLimiter allows it
-6. enable continous deployment once the server works
+7. enable continous deployment once the server works
     - every push to development should trigger a build and on success it should merge it into master
     - every update to master causes the production environment to change and deploy the new code
     - https://circleci.com/docs/docker/#application-deployment
