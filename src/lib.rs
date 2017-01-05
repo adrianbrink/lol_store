@@ -16,6 +16,7 @@ pub mod models;
 pub mod schema;
 pub mod unique_redis_queue;
 pub mod league_api;
+pub mod rater_limiter;
 
 // extern crate serde_json;
 

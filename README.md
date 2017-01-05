@@ -8,6 +8,7 @@ database for future analysis.
 docker-compose -f docker-compose.dev.yml up
 docker build -t lol_store .
 docker run --rm -it -v $(pwd):/source --network lolstore_default lol_store /bin/bash
+docker run --rm -it --link lolstore_redis_1 --network lolstore_default redis bash -c 'redis-cli -h redis'
 
 #TODO
 1. write the RateLimiter
