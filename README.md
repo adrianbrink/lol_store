@@ -1,5 +1,6 @@
 [![](https://tokei.rs/b1/github/adrianbrink/lol_store)](https://github.com/adrianbrink/lol_store)
 
+
 #The goal:
 A small server utility that downloads data from the league api and stores it in a postgres
 database for future analysis.
