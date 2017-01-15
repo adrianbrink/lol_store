@@ -1,1 +1,1 @@
-infer_schema!("postgres://postgres@postgres/lol_store");
+infer_schema!("postgres://postgres@localhost/lol_store");

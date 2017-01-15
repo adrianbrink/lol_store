@@ -11,28 +11,25 @@ impl RateLimiter {
         RateLimiter {
             one_gate: Gate {
                 count: 0,
+                limit: 10,
                 time: SystemTime::now(),
             },
             two_gate: Gate {
                 count: 0,
-                limit: 500
+                limit: 500,
                 time: SystemTime::now(),
             },
         }
-    }
-
-    pub fn is_allowed(&self) -> bool {
-        if 
     }
 }
 
 struct Gate {
     count: i32,
     limit: i32,
-    duration: Duration,
+    //duration: Duration,
     time: SystemTime,
 }
-
+/*
 impl Gate {
     pub fn is_allowed(&self) -> bool {
         let current_time = SystemTime::now();
@@ -40,3 +37,4 @@ impl Gate {
         if difference
     }
 }
+*/
