@@ -2,6 +2,7 @@
 
 
 
+
 #The goal:
 A small server utility that downloads data from the league api and stores it in a postgres
 database for future analysis.
