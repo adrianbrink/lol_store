@@ -1,25 +1,23 @@
 extern crate lol_store;
 
-use self::lol_store::postgres_connection::PostgresConnector;
-use self::lol_store::redis_connection::RedisConnector;
-use self::lol_store::unique_redis_queue::UniqueQueue;
+use self::lol_store::db_connectors::PostgresConnector;
+//use self::lol_store::redis_connection::RedisConnector;
+//use self::lol_store::unique_redis_queue::UniqueQueue;
 use self::lol_store::league_api::APIClient;
 
 fn main() {
     println!("Hello, world!");
 
     let api_client = APIClient::new().expect("League API instantiation failed.");
+    api_client.start_client();
 
     // TODO - this should be handled with .map_err(), but for that PostgresConnector needs to implement std::fmt::Display.
     let postgres_connector = PostgresConnector::new().expect("Postgres connection failed.");
     let postgres_connection = postgres_connector.get_connection();
 
-    // TODO - this should be handled with .map_err(), but for that RedisConnector needs to implement std::fmt::Display.
-    let redis_connector = RedisConnector::new().expect("Redis connection failed.");
-    let redis_connection = redis_connector.get_connection();
 
-    let summoner_queue = UniqueQueue::new(&redis_connection, "summoner".to_string());
-    let match_queue = UniqueQueue::new(&redis_connection, "match".to_string());
+
+
 
     // TODO - instead of doing this all in one loop this should be multi-threaded
     // one thread that only fills the summoner_queue

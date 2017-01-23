@@ -9,12 +9,12 @@ extern crate diesel_codegen;
 extern crate dotenv;
 extern crate redis;
 extern crate hyper;
+extern crate reqwest;
 
-pub mod postgres_connection;
-pub mod redis_connection;
+pub mod db_connectors;
 pub mod models;
 pub mod schema;
-pub mod unique_redis_queue;
+// pub mod unique_redis_queue;
 pub mod league_api;
 pub mod rater_limiter;
 

@@ -1,7 +1,30 @@
-// extern crate lol_store;
+extern crate lol_store;
 
-// use lol_store::league_api::*;
-// use lol_store::models::Participant;
+use lol_store::league_api::*;
+use lol_store::models::Participant;
+
+#[cfg(test)]
+mod test {
+    use super::*;
+
+    #[ignore]
+    #[test]
+    fn start_client() {
+        // This starts the process that contionously downloads from the league_api while mainting
+        // a list of summoner ids, the rate limit and stores everything in a database.
+        let api_client = APIClient::new().expect("League API instantiation failed.");
+        api_client.start_client();
+    }
+
+    // This maps to get_featured_games() on the riot API
+    // TODO: Make the APIClient into a trait for easier testing
+    #[ignore]
+    #[test]
+    fn get_summoner_seed() {
+        // can't be tested since it returns different data everytime
+        unimplemented!();
+    }
+}
 
 // #[cfg(test)]
 // mod test {

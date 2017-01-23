@@ -30,10 +30,12 @@ pub struct FeaturedGames {
     pub game_list: Vec<FeaturedGameInfo>,
 }
 
+
 #[derive(Serialize, Deserialize, Debug)]
 pub struct FeaturedGameInfo {
     pub participants: Vec<Participant>,
 }
+
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Participant {
@@ -41,15 +43,18 @@ pub struct Participant {
     pub summoner_name: String,
 }
 
+
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Summoner {
     pub id: i64,
 }
 
+
 #[derive(Serialize, Deserialize, Debug)]
 pub struct MatchList {
     pub matches: Vec<MatchReference>,
 }
+
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct MatchReference {

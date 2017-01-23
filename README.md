@@ -1,19 +1,19 @@
 [![](https://tokei.rs/b1/github/adrianbrink/lol_store)](https://github.com/adrianbrink/lol_store)
 
-
-
-
-
 #The goal:
 A small server utility that downloads data from the league api and stores it in a postgres
 database for future analysis.
 
 
 #How to run
-docker-compose -f docker-compose.dev.yml up
+docker-compose -f -d docker-compose.yml up
 docker build -t lol_store .
 docker run --rm -it -v $(pwd):/source --network lolstore_default lol_store /bin/bash
 docker run --rm -it --link lolstore_redis_1 --network lolstore_default redis bash -c 'redis-cli -h redis'
+
+#The Process
+1.) Get featured games :Vec<GameList<gameId>>, stored in VecDeque()
+2.) 
 
 #TODO
 1. write the RateLimiter

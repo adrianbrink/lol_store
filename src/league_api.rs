@@ -6,6 +6,8 @@ use std::env;
 use super::models::{FeaturedGames, Participant, Summoner, MatchList};
 use std::io::Read;
 use std::collections::BTreeMap;
+use std::collections::vec_deque::*;
+use reqwest;
 
 pub struct APIClient {
     api_key: String,
@@ -15,6 +17,13 @@ pub struct APIClient {
 // Move the exposed methods into a trait and then implement the trait. This way one can pass
 // a testable API client that just implements the interface.
 impl APIClient {
+    pub fn start_client(&self) {
+        let mut summoner_ids: VecDeque<i64> = VecDeque::new();
+        let seed = self.get_summoner_seed();
+        seed.into_iter().map(|id| summoner_ids.push_back(id));
+        println!("{:?}", summoner_ids.pop_front());
+    }
+
     pub fn new() -> Result<APIClient, env::VarError> {
         dotenv().ok();
         let api_key = env::var("RIOT_API_KEY")?;
@@ -44,6 +53,7 @@ impl APIClient {
         match_list.matches.into_iter().map(|match_| match_.match_id).collect::<Vec<i64>>()
     }
 
+
     fn request_get_matchlist(&self, summoner_id: i64) -> String {
         let request_url = format!("https://euw.api.pvp.net/api/lol/euw/v2.\
                                    2/matchlist/by-summoner/{}?rankedQueues=RANKED_FLEX_SR,\
@@ -61,10 +71,13 @@ impl APIClient {
     fn request_get_featured_games(&self) -> String {
         let request_url = format!("https://euw.api.pvp.net/observer-mode/rest/featured?api_key={}",
                                   self.api_key);
-        let mut req = self.hyper_client.get(&request_url).send().expect("API call failed.");
-        let mut res = String::new();
-        let _ = req.read_to_string(&mut res);
-        res
+        let mut res = reqwest::get(&request_url).expect("1 = API call failed.");
+        // let mut res = String::new();
+        // let _ = req.read_to_string(&mut res);
+
+        println!("{:?}", res.json::<String>());
+        // res
+        "dd".to_string()
     }
 
     fn get_summoner_ids(&self, summoner_names: Vec<String>) -> Vec<i64> {
